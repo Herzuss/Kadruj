@@ -1,67 +1,51 @@
-# Payload Blank Template
+# Kadruj
 
-This template comes configured with the bare minimum to get started on anything you need.
+Fikcyjny sklep e-commerce dla marki fotograficznej — projekt portfolio demonstrujący pełny stack nowoczesnego e-commerce: od panelu admina, przez płatności, po rozróżnienie produktów fizycznych i cyfrowych w jednym checkout flow.
 
-## Quick start
+> Projekt edukacyjny / case study. Marka, produkty i treści są fikcyjne.
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Czego dotyczy projekt
 
-## Quick Start - local setup
+Kadruj to sklep sprzedający produkty związane z fotografią, łączący dwa różne modele realizacji zamówienia w jednym systemie:
 
-To spin up this template locally, follow these steps:
+- **Produkty fizyczne** — wydruki fotograficzne, albumy (wymagają adresu dostawy, kosztu wysyłki)
+- **Produkty cyfrowe** — presety do Lightrooma, pakiety zdjęć stockowych (dostawa natychmiastowa, brak adresu)
 
-### Clone
+Celem projektu było przećwiczenie sytuacji, z jaką realnie spotyka się większość sklepów internetowych: różne typy produktów wymagają różnej logiki w koszyku, checkout i po finalizacji zamówienia.
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+## Stack technologiczny
 
-### Development
+| Warstwa | Technologia | Rola |
+|---|---|---|
+| Frontend | Next.js (App Router) + TypeScript | Renderowanie stron, routing |
+| Styling | Tailwind CSS | System wizualny |
+| CMS / Panel admina | Payload CMS | Zarządzanie produktami, kategoriami, zamówieniami, autentykacja |
+| Baza danych | Supabase (PostgreSQL) | Przechowywanie danych |
+| Płatności | Stripe | Checkout, webhooks |
+| Upload plików | Uploadthing | Zdjęcia produktów |
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+## Architektura — kluczowe decyzje
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+- **Payload CMS jako warstwa backendowa** — zamiast łączyć osobny ORM (Prisma) z osobnym systemem autentykacji (Auth.js), Payload dostarcza obie funkcje wbudowane, redukując liczbę zależności i punktów awarii.
+- **Rozróżnienie produktów na poziomie danych** — typ produktu (fizyczny/cyfrowy) determinuje logikę checkout, nie jest to rozwiązane na poziomie UI.
+- **Połączenie z bazą przez connection pooler** — zamiast direct connection, dla stabilności połączeń w środowisku serverless/deployment.
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+## Status projektu
 
-#### Docker (Optional)
+🚧 W budowie — aktualny postęp i plan rozwoju w [issues](../../issues) / [projects](../../projects).
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+## Uruchomienie lokalne
 
-To do so, follow these steps:
+```bash
+git clone https://github.com/Herzuss/kadruj.git
+cd kadruj
+pnpm install
+cp .env.example .env   # uzupełnij własne wartości
+pnpm dev
+```
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+Panel admina dostępny pod `/admin` po skonfigurowaniu zmiennych środowiskowych.
 
-## How it works
+## Autor
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
-
-### Collections
-
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
-
-- #### Users (Authentication)
-
-  Users are auth-enabled collections that have access to the admin panel.
-
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-### Docker
-
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+Filip Herzog — [HerzogWeb](https://herzogweb.pl)

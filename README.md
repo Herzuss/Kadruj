@@ -1,51 +1,51 @@
 # Kadruj
 
-Fikcyjny sklep e-commerce dla marki fotograficznej — projekt portfolio demonstrujący pełny stack nowoczesnego e-commerce: od panelu admina, przez płatności, po rozróżnienie produktów fizycznych i cyfrowych w jednym checkout flow.
+A fictional e-commerce store for a photography brand — a portfolio project demonstrating a full modern e-commerce stack: from the admin panel, through payments, to handling physical and digital products within a single checkout flow.
 
-> Projekt edukacyjny / case study. Marka, produkty i treści są fikcyjne.
+> Educational project / case study. The brand, products, and content are fictional.
 
-## Czego dotyczy projekt
+## About the project
 
-Kadruj to sklep sprzedający produkty związane z fotografią, łączący dwa różne modele realizacji zamówienia w jednym systemie:
+Kadruj is a store selling photography-related products, combining two different order-fulfilment models in one system:
 
-- **Produkty fizyczne** — wydruki fotograficzne, albumy (wymagają adresu dostawy, kosztu wysyłki)
-- **Produkty cyfrowe** — presety do Lightrooma, pakiety zdjęć stockowych (dostawa natychmiastowa, brak adresu)
+- **Physical products** — photo prints, albums (require a shipping address and shipping cost)
+- **Digital products** — Lightroom presets, stock photo packs (instant delivery, no address needed)
 
-Celem projektu było przećwiczenie sytuacji, z jaką realnie spotyka się większość sklepów internetowych: różne typy produktów wymagają różnej logiki w koszyku, checkout i po finalizacji zamówienia.
+The goal was to practice a situation most online stores actually face: different product types require different logic in the cart, at checkout, and after the order is placed.
 
-## Stack technologiczny
+## Tech Stack
 
-| Warstwa | Technologia | Rola |
+| Layer | Technology | Role |
 |---|---|---|
-| Frontend | Next.js (App Router) + TypeScript | Renderowanie stron, routing |
-| Styling | Tailwind CSS | System wizualny |
-| CMS / Panel admina | Payload CMS | Zarządzanie produktami, kategoriami, zamówieniami, autentykacja |
-| Baza danych | Supabase (PostgreSQL) | Przechowywanie danych |
-| Płatności | Stripe | Checkout, webhooks |
-| Upload plików | Uploadthing | Zdjęcia produktów |
+| Frontend | Next.js (App Router) + TypeScript | Page rendering, routing |
+| Styling | Tailwind CSS | Visual system |
+| CMS / Admin panel | Payload CMS | Managing products, categories, orders; authentication |
+| Database | Supabase (PostgreSQL) | Data storage |
+| Payments | Stripe | Checkout, webhooks |
+| File uploads | Uploadthing | Product images |
 
-## Architektura — kluczowe decyzje
+## Architecture — key decisions
 
-- **Payload CMS jako warstwa backendowa** — zamiast łączyć osobny ORM (Prisma) z osobnym systemem autentykacji (Auth.js), Payload dostarcza obie funkcje wbudowane, redukując liczbę zależności i punktów awarii.
-- **Rozróżnienie produktów na poziomie danych** — typ produktu (fizyczny/cyfrowy) determinuje logikę checkout, nie jest to rozwiązane na poziomie UI.
-- **Połączenie z bazą przez connection pooler** — zamiast direct connection, dla stabilności połączeń w środowisku serverless/deployment.
+- **Payload CMS as the backend layer** — instead of combining a separate ORM (Prisma) with a separate auth system (Auth.js), Payload provides both out of the box, reducing the number of dependencies and points of failure.
+- **Product distinction at the data level** — the product type (physical/digital) drives the checkout logic; it is not handled at the UI level.
+- **Database connection through a connection pooler** — instead of a direct connection, for stable connections in a serverless/deployment environment.
 
-## Status projektu
+## Project status
 
-🚧 W budowie — aktualny postęp i plan rozwoju w [issues](../../issues) / [projects](../../projects).
+🚧 In progress — current progress and roadmap in [issues](../../issues) / [projects](../../projects).
 
-## Uruchomienie lokalne
+## Running locally
 
 ```bash
 git clone https://github.com/Herzuss/kadruj.git
 cd kadruj
 pnpm install
-cp .env.example .env   # uzupełnij własne wartości
+cp .env.example .env   # fill in your own values
 pnpm dev
 ```
 
-Panel admina dostępny pod `/admin` po skonfigurowaniu zmiennych środowiskowych.
+The admin panel is available at `/admin` once the environment variables are configured.
 
-## Autor
+## Author
 
 Filip Herzog — [HerzogWeb](https://herzogweb.pl)

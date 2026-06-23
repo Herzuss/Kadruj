@@ -1,59 +1,71 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
+import Link from 'next/link'
 import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
-
 import config from '@/payload.config'
+import { formatPrice } from '@/lib/format'
 import './styles.css'
 
+// To jest Server Component (funkcja async). Wykonuje się na serwerze, więc
+// może sięgnąć bezpośrednio do bazy przez Local API — bez fetcha, bez HTTP.
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  const payload = await getPayload({ config: await config })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  // payload.find = "daj rekordy z kolekcji". depth: 1 rozwija relacje
+  // (category staje się obiektem, nie samym ID). limit: ile maksymalnie.
+  const { docs: products } = await payload.find({
+    collection: 'products',
+    depth: 1,
+    limit: 12,
+  })
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
+    <div className="mx-auto max-w-5xl px-6 py-12">
+      <header className="mb-10">
+        <h1 className="text-4xl font-semibold tracking-tight">Kadruj</h1>
+        <p className="mt-2 text-neutral-500">
+          Wydruki, albumy, presety i zdjęcia stockowe.
+        </p>
+      </header>
+
+      {/* Stan pusty — gdyby ktoś nie dodał jeszcze produktów */}
+      {products.length === 0 ? (
+        <p className="text-neutral-500">
+          Brak produktów. Dodaj je w panelu{' '}
+          <a href="/admin" className="underline">
+            /admin
           </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+          .
+        </p>
+      ) : (
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <li key={product.id}>
+              {/* Link Nexta = nawigacja bez przeładowania strony. href budujemy
+                  ze sluga produktu → /produkty/wydruk-mgla-... */}
+              <Link
+                href={`/produkty/${product.slug}`}
+                className="block h-full rounded-xl border border-neutral-200 p-5 transition hover:border-neutral-400"
+              >
+                {/* Plakietka typu — wprost z pola `type`. To wizualnie pokazuje
+                    różnicę, którą później wykorzystamy w checkout. */}
+                <span
+                  className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    product.type === 'digital'
+                      ? 'bg-violet-100 text-violet-700'
+                      : 'bg-emerald-100 text-emerald-700'
+                  }`}
+                >
+                  {product.type === 'digital' ? 'Cyfrowy' : 'Fizyczny'}
+                </span>
+
+                <h2 className="mt-3 text-lg font-medium">{product.title}</h2>
+                <p className="mt-1 text-xl font-semibold">
+                  {formatPrice(product.price)}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

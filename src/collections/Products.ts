@@ -110,5 +110,13 @@ export const Products: CollectionConfig = {
         description: 'Plik do pobrania udostępniany po opłaceniu (preset / paczka zdjęć).',
       },
     },
+    {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Pokaz na stronie glownej w sekcji "Wybrane produkty".'
+      }
+    }
   ],
 }

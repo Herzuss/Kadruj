@@ -3,10 +3,10 @@
    konfigurację (kolory, fonty) wpisuje się w CSS w bloku @theme. */
 @import 'tailwindcss';
 
-/* @theme = miejsce na zmienne motywu. Każda zmienna staje się automatycznie
-   klasą Tailwinda, np. --color-brand → klasy `bg-brand`, `text-brand`.
-   Na razie minimalnie — markę dopieszczymy później. */
-@theme {
-  --color-brand: #111111;
-  --font-sans: system-ui, -apple-system, sans-serif;
+/* @theme = tokeny motywu → automatycznie klasy Tailwinda (np. font-display).
+   `inline` jest KONIECZNE, gdy wartość używa var() z next/font (--font-fraunces
+   to zmienna ustawiana w przeglądarce/runtime). Bez `inline` Tailwind v4 nie
+   zarejestruje tokena z var() i klasa font-display nie powstanie. */
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
 }

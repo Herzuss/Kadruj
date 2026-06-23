@@ -225,6 +225,10 @@ export interface Product {
    * Plik do pobrania udostępniany po opłaceniu (preset / paczka zdjęć).
    */
   downloadFile?: (number | null) | Media;
+  /**
+   * Pokaz na stronie glownej w sekcji "Wybrane produkty".
+   */
+  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -376,6 +380,7 @@ export interface ProductsSelect<T extends boolean = true> {
   stock?: T;
   weightGrams?: T;
   downloadFile?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }

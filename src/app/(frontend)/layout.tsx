@@ -4,6 +4,9 @@ import { CartProvider } from '@/providers/cart-context'
 import { SiteHeader } from '@/components/SiteHeader'
 import { PromoBar } from '@/components/PromoBar'
 import { SiteFooter } from '@/components/SiteFooter'
+import { headers as getHeaders } from 'next/headers'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
 import './styles.css'
 
 // next/font pobiera czcionkę Fraunces (elegancki serif — pasuje do marki
@@ -23,7 +26,10 @@ export const metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
-
+  const h = await getHeaders()
+  const payload = await getPayload({ config: await config })
+  const { user } = await payload.auth({ headers: h })
+  const customerName = user?.collection === 'customers' ? user.name : null
   return (
     // className z fraunces.variable "włącza" zmienną --font-fraunces na całej stronie.
     <html lang="pl" className={fraunces.variable}>
@@ -32,7 +38,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
             Jest klientem, ale może opakować Server Components (children). */}
         <CartProvider>
           <PromoBar />
-          <SiteHeader />
+          <SiteHeader customerName={customerName} />
           <main>{children}</main>
           <SiteFooter />
         </CartProvider>

@@ -5,7 +5,7 @@ import { useCart } from '@/providers/cart-context'
 
 // Nagłówek widoczny na każdej stronie. Pokazuje licznik sztuk w koszyku —
 // dlatego musi być klientem (czyta żywy stan z useCart()).
-export function SiteHeader() {
+export function SiteHeader({ customerName }: { customerName: string | null }) {
   const { count } = useCart()
 
   return (
@@ -27,6 +27,7 @@ export function SiteHeader() {
           <Link href="#" className="hover:text-neutral-900">
             Kontakt
           </Link>
+          {customerName ? <Link href="/konto">Konto</Link> : <Link href="/logowanie">Zaloguj</Link>}
         </nav>
 
         <Link href="/koszyk" className="relative text-sm font-medium hover:text-neutral-600">

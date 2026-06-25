@@ -9,7 +9,7 @@ export default async function KontoPage() {
   const payload = await getPayload({ config: await config })
   const { user } = await payload.auth({ headers }) // Payload czyta cookie → kto zalogowany
 
-  if (!user || user.collection != 'customers') redirect('/logowanie') // niezalogowany? wyrzuć na logowanie
+  if (!user || user.collection !== 'customers') redirect('/logowanie') // niezalogowany? wyrzuć na logowanie
 
   // tu user to obiekt klienta: user.name, user.email, user.id ...
   return (

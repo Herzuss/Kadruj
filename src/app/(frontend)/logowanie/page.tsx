@@ -20,6 +20,7 @@ export default function LogowaniePage() {
 
     if (res.ok) {
       router.push('/konto')
+      router.refresh()
     } else {
       setError('Nie udalo sie zalogowac')
     }

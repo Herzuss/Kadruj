@@ -12,7 +12,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-12">
-        <h1 className="text-3xl font-semibold tracking-tight">Koszyk</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight">Koszyk</h1>
         <p className="mt-4 text-neutral-500">
           Koszyk jest pusty.{' '}
           <Link href="/" className="underline">
@@ -26,7 +26,7 @@ export default function CartPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-3xl font-semibold tracking-tight">Koszyk</h1>
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Koszyk</h1>
 
       <ul className="mt-8 divide-y divide-neutral-200">
         {items.map((item) => (

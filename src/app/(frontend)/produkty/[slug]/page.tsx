@@ -58,6 +58,11 @@ export default async function ProductPage({ params }: Props) {
         ← Wróć do sklepu
       </Link>
 
+      {/* Obszar zdjęcia produktu — placeholder do kroku 7 (Uploadthing) */}
+      <div className="mt-6 flex aspect-[4/3] items-center justify-center rounded-xl bg-neutral-100 text-sm text-neutral-400">
+        Zdjęcie wkrótce
+      </div>
+
       <div className="mt-6 flex items-center gap-3">
         <span
           className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
@@ -71,7 +76,7 @@ export default async function ProductPage({ params }: Props) {
         )}
       </div>
 
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">{product.title}</h1>
+      <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight">{product.title}</h1>
       <p className="mt-2 text-2xl font-semibold">{formatPrice(product.price)}</p>
 
       {/* Opis z edytora lexical. RichText zamienia JSON z bazy na HTML.

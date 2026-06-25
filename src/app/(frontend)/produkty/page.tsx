@@ -15,7 +15,10 @@ export default async function ProduktyPage (){
 
   return(
     <div className="mx-auto max-w-5xl px-6 py-12">
-      <h1>Wszystkie produkty {products.length}</h1>
+      <header className="mb-8">
+        <h1 className="font-display text-4xl font-semibold tracking-tight">Produkty</h1>
+        <p className="mt-2 text-neutral-500">Wszystko, co mamy — {products.length} szt.</p>
+      </header>
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.length === 0 ? (
           <p>Brak produktów, dodaj je w panelu admina</p>

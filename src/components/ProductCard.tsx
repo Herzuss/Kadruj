@@ -1,19 +1,39 @@
-import type {Product} from '@/payload-types'
+import type { Product } from '@/payload-types'
 import Link from 'next/link'
 import { formatPrice } from '@/lib/format'
 
-export default function ProductCard({product}: {product:Product}) {
+export default function ProductCard({ product }: { product: Product }) {
+  const isDigital = product.type === 'digital'
+
   return (
     <Link
       href={`/produkty/${product.slug}`}
-      className="flex flex-col bg-neutral-100 h-full rounded-xl border border-neutral-200 px-4 py-4"
-      >
-        <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${product.type === "digital" ? "bg-violet-100 text-violet-700" : "bg-emerald-100 text-emerald-700"}`}>
-          {product.type === 'digital' ? 'Cyfrowy' : 'Fizyczny'}
+      // group + overflow-hidden: zaokrąglone rogi obejmują też obszar zdjęcia.
+      // hover na ramce daje subtelny feedback "to jest klikalne".
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 transition hover:border-neutral-400"
+    >
+      {/* Obszar zdjęcia. aspect-square = kwadrat skalujący się z szerokością karty.
+          Na razie placeholder — zastąpi go <Image> w kroku 7 (Uploadthing). */}
+      <div className="flex aspect-square items-center justify-center bg-neutral-100 text-sm text-neutral-400">
+        Zdjęcie wkrótce
+      </div>
+
+      {/* flex-1: treść rozciąga się, więc ceny w rzędzie kart są wyrównane,
+          nawet gdy tytuły mają różną długość. */}
+      <div className="flex flex-1 flex-col p-4">
+        {/* w-fit: pigułka obejmuje tylko swój tekst, nie całą szerokość */}
+        <span
+          className={`mb-2 inline-block w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${
+            isDigital ? 'bg-violet-100 text-violet-700' : 'bg-emerald-100 text-emerald-700'
+          }`}
+        >
+          {isDigital ? 'Cyfrowy' : 'Fizyczny'}
         </span>
-        <h2  className="text-xl font-semibold text-left">{product.title}</h2>
-        <div className="h-50 w-50 bg-neutral-500 text-2xl text-neutral-100 text-left">PLACEHOLDER</div>
-        <p className="text-md font-bold text-left">{formatPrice(product.price)}</p>
-      </Link>
+
+        {/* h3 — bo h1 to tytuł strony, h2 to nagłówek sekcji ("Wybrane produkty") */}
+        <h3 className="font-medium leading-snug">{product.title}</h3>
+        <p className="mt-2 text-lg font-semibold">{formatPrice(product.price)}</p>
+      </div>
+    </Link>
   )
 }

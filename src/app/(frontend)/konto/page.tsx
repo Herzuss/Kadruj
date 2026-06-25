@@ -9,15 +9,24 @@ export default async function KontoPage() {
   const payload = await getPayload({ config: await config })
   const { user } = await payload.auth({ headers }) // Payload czyta cookie → kto zalogowany
 
-  if (!user || user.collection !== 'customers') redirect('/logowanie') // niezalogowany? wyrzuć na logowanie
+  // Niezalogowany albo to nie klient (np. admin) → na logowanie.
+  if (!user || user.collection !== 'customers') redirect('/logowanie')
 
-  // tu user to obiekt klienta: user.name, user.email, user.id ...
   return (
-    <div>
-      <h1 className="text-neutral-900 text-2xl text-left">Moje konto</h1>
-      <p className="text-neutral-900 text-lg">{user.name} </p>
-      <p className="text-neutral-900 text-lg"> {user.email}</p>
-      <LogoutButton />{' '}
+    <div className="mx-auto max-w-2xl px-6 py-16">
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Moje konto</h1>
+
+      <div className="mt-8 rounded-xl border border-neutral-200 p-6">
+        <p className="text-xs uppercase tracking-wide text-neutral-400">Imię i nazwisko</p>
+        <p className="mt-1 text-lg">{user.name}</p>
+
+        <p className="mt-5 text-xs uppercase tracking-wide text-neutral-400">E-mail</p>
+        <p className="mt-1 text-lg">{user.email}</p>
+      </div>
+
+      <div className="mt-6">
+        <LogoutButton />
+      </div>
     </div>
   )
 }

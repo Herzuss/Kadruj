@@ -66,10 +66,10 @@ export const Orders: CollectionConfig = {
       ],
     },
 
-    // ID sesji Stripe — łączy zamówienie z płatnością i chroni przed duplikatami
-    // (webhook bywa wysyłany kilka razy → sprawdzamy, czy już mamy ten sessionId).
+    // ID PaymentIntent Stripe — łączy zamówienie z płatnością i chroni przed
+    // duplikatami (webhook bywa wysyłany kilka razy → sprawdzamy, czy już mamy to id).
     {
-      name: 'stripeSessionId',
+      name: 'stripePaymentIntentId',
       type: 'text',
       index: true,
       admin: { readOnly: true },

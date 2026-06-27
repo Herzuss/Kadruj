@@ -303,7 +303,7 @@ export interface Order {
         id?: string | null;
       }[]
     | null;
-  stripeSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
   /**
    * Wypełniane tylko dla zamówień z wysyłką.
    */
@@ -529,7 +529,7 @@ export interface OrdersSelect<T extends boolean = true> {
         quantity?: T;
         id?: T;
       };
-  stripeSessionId?: T;
+  stripePaymentIntentId?: T;
   shippingAddress?:
     | T
     | {

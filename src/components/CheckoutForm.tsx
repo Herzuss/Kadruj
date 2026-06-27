@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, type SyntheticEvent } from 'react'
-import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { PaymentElement, AddressElement, useStripe, useElements } from '@stripe/react-stripe-js'
 
 // Sam formularz płatności. Renderowany WEWNĄTRZ <Elements> (patrz checkout/page.tsx),
 // dzięki czemu useStripe()/useElements() mają dostęp do kontekstu Stripe.
-export function CheckoutForm() {
+export function CheckoutForm({ hasPhysical }: { hasPhysical: boolean }) {
   const stripe = useStripe() // instancja Stripe.js (null dopóki się ładuje)
   const elements = useElements() // kontener pól Stripe (PaymentElement)
   const [error, setError] = useState<string | null>(null)
@@ -36,6 +36,7 @@ export function CheckoutForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* PaymentElement = gotowe, bezpieczne pole karty (i innych metod) od Stripe */}
+      {hasPhysical && <AddressElement options={{ mode: 'shipping' }} />}
       <PaymentElement />
 
       {error && <p className="text-sm text-red-600">{error}</p>}

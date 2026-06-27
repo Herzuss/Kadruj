@@ -16,6 +16,7 @@ export default function CheckoutPage() {
   const { items } = useCart()
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [total, setTotal] = useState(0)
+  const hasPhysical = items.some((i) => i.type === 'physical')
 
   // Po wczytaniu koszyka → poproś serwer o PaymentIntent i odbierz client_secret.
   useEffect(() => {
@@ -46,8 +47,9 @@ export default function CheckoutPage() {
           <p className="mt-2 text-neutral-500">Do zapłaty: {formatPrice(total)}</p>
           <div className="mt-8">
             {/* <Elements> dostarcza kontekst Stripe + client_secret całemu formularzowi */}
+
             <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <CheckoutForm />
+              <CheckoutForm hasPhysical={hasPhysical} />
             </Elements>
           </div>
         </>

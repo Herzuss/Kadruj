@@ -12,6 +12,7 @@ export default function SukcesPage() {
 
   // Po udanej płatności opróżnij koszyk (raz, po wejściu na stronę).
   useEffect(() => {
+    localStorage.removeItem('kadruj-cart')
     clear()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

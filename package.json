@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev": "cross-env NODE_OPTIONS=\"--no-deprecation --dns-result-order=ipv4first\" next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -22,6 +22,8 @@
     "@payloadcms/next": "3.85.1",
     "@payloadcms/richtext-lexical": "3.85.1",
     "@payloadcms/ui": "3.85.1",
+    "@stripe/react-stripe-js": "^6.6.0",
+    "@stripe/stripe-js": "^9.8.0",
     "@tailwindcss/postcss": "^4.3.1",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
@@ -32,6 +34,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "sharp": "0.34.2",
+    "stripe": "^22.3.0",
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {

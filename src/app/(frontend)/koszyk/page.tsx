@@ -98,13 +98,12 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Placeholder — płatność podłączymy w kroku 6 (Stripe). */}
-      <button
-        type="button"
-        className="mt-8 w-full rounded-lg bg-neutral-900 px-5 py-3 font-medium text-white transition hover:bg-neutral-700"
+      <Link
+        href="/checkout"
+        className="mt-8 block w-full rounded-lg bg-neutral-900 px-5 py-3 text-center font-medium text-white transition hover:bg-neutral-700"
       >
         Przejdź do płatności
-      </button>
+      </Link>
     </div>
   )
 }

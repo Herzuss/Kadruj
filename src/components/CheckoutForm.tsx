@@ -10,6 +10,7 @@ export function CheckoutForm({ hasPhysical }: { hasPhysical: boolean }) {
   const elements = useElements() // kontener pól Stripe (PaymentElement)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault()
@@ -24,6 +25,7 @@ export function CheckoutForm({ hasPhysical }: { hasPhysical: boolean }) {
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/zamowienie/sukces`,
+        receipt_email: email,
       },
     })
 
@@ -36,6 +38,14 @@ export function CheckoutForm({ hasPhysical }: { hasPhysical: boolean }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* PaymentElement = gotowe, bezpieczne pole karty (i innych metod) od Stripe */}
+      <input
+        type="email"
+        required
+        placeholder="Twój e-mail"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full rounded-lg border border-neutral-300 px-4 py-2.5 text-sm outline-none transition focus:border-neutral-900"
+      />
       {hasPhysical && <AddressElement options={{ mode: 'shipping' }} />}
       <PaymentElement />
 

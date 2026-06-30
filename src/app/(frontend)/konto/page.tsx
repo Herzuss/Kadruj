@@ -3,14 +3,20 @@ import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import LogoutButton from '@/components/LogoutButton'
+import { formatPrice } from '@/lib/format'
 
 export default async function KontoPage() {
   const headers = await getHeaders() // nagłówki żądania (w nich cookie)
   const payload = await getPayload({ config: await config })
   const { user } = await payload.auth({ headers }) // Payload czyta cookie → kto zalogowany
-
   // Niezalogowany albo to nie klient (np. admin) → na logowanie.
   if (!user || user.collection !== 'customers') redirect('/logowanie')
+
+  const { docs: orders } = await payload.find({
+    collection: 'orders',
+    where: { customer: { equals: user.id } },
+    sort: '-createdAt',
+  })
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
@@ -22,6 +28,23 @@ export default async function KontoPage() {
 
         <p className="mt-5 text-xs uppercase tracking-wide text-neutral-400">E-mail</p>
         <p className="mt-1 text-lg">{user.email}</p>
+      </div>
+
+      <div>
+        <h2 className="font-display">Twoje zamówienia</h2>
+        {orders.length === 0 ? (
+          <p>Nie masz jeszcze zamówienia</p>
+        ) : (
+          <ul className="mt-4 space-y-4">
+            {orders.map((order) => (
+              <li key={order.id} className="rounded-xl border border-neutral-200 p-4">
+                <p>Status: {order.status}</p>
+                <p>{formatPrice(order.total)}</p>
+                <p>{new Date(order.createdAt).toLocaleDateString('pl-PL')}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="mt-6">

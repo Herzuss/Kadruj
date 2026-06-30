@@ -17,11 +17,7 @@ export async function POST(req: Request) {
   try {
     // Weryfikacja podpisu — potwierdza, że request NAPRAWDĘ pochodzi od Stripe,
     // a nie od kogoś, kto podszywa się pod webhook. Klucz z .env (STRIPE_WEBHOOK_SECRET).
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature!,
-      process.env.STRIPE_WEBHOOK_SECRET!,
-    )
+    event = stripe.webhooks.constructEvent(body, signature!, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch (err) {
     console.error('Webhook: zły podpis', err)
     return new Response('Invalid signature', { status: 400 })
@@ -44,9 +40,7 @@ export async function POST(req: Request) {
     }
 
     // Odtwórz pozycje koszyka z metadanych PaymentIntent.
-    const cartItems: { id: number; quantity: number }[] = JSON.parse(
-      pi.metadata.items || '[]',
-    )
+    const cartItems: { id: number; quantity: number }[] = JSON.parse(pi.metadata.items || '[]')
     const ids = cartItems.map((i) => i.id)
     const { docs: products } = await payload.find({
       collection: 'products',
@@ -67,9 +61,7 @@ export async function POST(req: Request) {
 
     // E-mail kupującego — z konta klienta (jeśli zalogowany) albo z receipt_email.
     let email = pi.receipt_email ?? ''
-    const customerId = pi.metadata.customerId
-      ? Number(pi.metadata.customerId)
-      : undefined
+    const customerId = pi.metadata.customerId ? Number(pi.metadata.customerId) : undefined
     if (customerId) {
       const customer = await payload
         .findByID({ collection: 'customers', id: customerId })
@@ -103,6 +95,24 @@ export async function POST(req: Request) {
         ...(shippingAddress ? { shippingAddress } : {}),
       },
     })
+
+    const baseUrl = 'http://localhost:3000'
+    const digitalLinks = cartItems
+      .map((ci) => products.find((p) => p.id === ci.id))
+      .filter((p) => p?.type === 'digital' && p?.downloadFile && typeof p.downloadFile === 'object')
+      .map(
+        (p) =>
+          `<li><a href="${baseUrl}${(p!.downloadFile as { url?: string }).url}">${p!.title}</a></li>`,
+      )
+      .join('')
+
+    if (digitalLinks) {
+      await payload.sendEmail({
+        to: email,
+        subject: 'Twoje pliki z Kadruj',
+        html: `<h2>Dziękujemy za zakup!</h2><p>Pobierz swoje pliki:</p><ul>${digitalLinks}</ul>`,
+      })
+    }
   }
 
   // Zawsze odpowiedz 200, żeby Stripe wiedział, że odebrałeś (inaczej będzie ponawiał).

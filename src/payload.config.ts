@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -34,5 +35,12 @@ export default buildConfig({
     },
   }),
   sharp,
+  // Adapter email — Resend. defaultFromAddress to nadawca; onboarding@resend.dev
+  // działa do testów bez weryfikacji domeny (wysyła na Twój własny adres).
+  email: resendAdapter({
+    defaultFromAddress: 'onboarding@resend.dev',
+    defaultFromName: 'Kadruj',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   plugins: [],
 })
